@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2c67b0">
+<title>Quiz1 핵심</title>
+<style>
+:root{--bg:#f6f4f0;--panel:#fff;--ink:#1d2127;--muted:#6a707a;--line:#e3ded5;--accent:#2c67b0;--soft:#e7eef8;--code:#efece6;--codeink:#2f343b;--ok:#2f855a;--oksoft:#eaf6ef;--bad:#c0392b;--badsoft:#fbeceb;--warn:#b7791f;--warnsoft:#fdf4e3}
+@media (prefers-color-scheme: dark){:root{--bg:#131518;--panel:#1d2025;--ink:#e8eaed;--muted:#a2a8b1;--line:#343941;--accent:#82b1ea;--soft:#1f2e42;--code:#2b3038;--codeink:#e6edf3;--ok:#5cc28a;--oksoft:#1a2a21;--bad:#ef7b6f;--badsoft:#2e1b1a;--warn:#e0a84a;--warnsoft:#2e2416}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;font-size:16px;line-height:1.65;word-break:keep-all;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+header{padding:18px 16px 8px}
+h1{font-size:1.3rem;margin:0}
+.sub{color:var(--muted);font-size:.85rem;margin:2px 0 0}
+.dday{display:flex;gap:8px;margin:12px 0 4px;flex-wrap:wrap}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:3px 11px;font-size:.82rem}
+.chip b{color:var(--accent)}
+main{padding:0 16px}
+section{display:none}
+section.on{display:block}
+h2{font-size:1.08rem;margin:18px 0 8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.card h3{margin:0 0 6px;font-size:1rem;color:var(--accent)}
+.card ul{margin:4px 0;padding-left:1.15em}
+.card li{margin:3px 0}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;background:var(--code);color:var(--codeink);padding:1px 5px;border-radius:5px;word-break:keep-all;overflow-wrap:break-word}
+pre{background:var(--code);border-radius:10px;padding:10px 12px;margin:8px 0;white-space:pre-wrap;word-break:break-word;font-size:.84rem;line-height:1.5}
+pre code{background:none;padding:0;font-size:inherit;word-break:break-word}
+details{border-top:1px solid var(--line);margin-top:8px;padding-top:6px}
+details:first-of-type{border-top:0;margin-top:0;padding-top:0}
+summary{font-weight:700;cursor:pointer;padding:6px 0;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";color:var(--muted);font-weight:400}
+details[open] summary::after{content:"－"}
+.trap{display:flex;gap:10px;align-items:flex-start}
+.trap .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--warnsoft);color:var(--warn);font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.trap p{margin:0}
+.muted{color:var(--muted);font-size:.85rem}
+/* 카드 퀴즈 */
+.qbar{display:flex;justify-content:space-between;align-items:center;margin:14px 0 4px;font-size:.85rem;color:var(--muted)}
+.qbar button{font:inherit;font-size:.82rem;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:4px 12px}
+.flash{min-height:210px;display:flex;flex-direction:column;justify-content:center}
+.flash .q{font-size:1.02rem}
+.flash .tag{font-size:.75rem;font-weight:800;color:var(--accent);margin-bottom:6px}
+.ans{display:none;margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--oksoft);border-left:4px solid var(--ok)}
+.ans.on{display:block}
+.ans .big{font-weight:800;color:var(--ok);font-size:1.05rem}
+.btns{display:flex;gap:8px;margin:10px 0}
+.btns button{flex:1;font:inherit;font-weight:700;border-radius:12px;padding:13px 6px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.btns .show{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btns .know{background:var(--oksoft);color:var(--ok);border-color:transparent}
+.btns .again{background:var(--badsoft);color:var(--bad);border-color:transparent}
+.score{font-size:.8rem;color:var(--muted);text-align:center}
+/* 하단 탭 */
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:10}
+nav button{flex:1;font:inherit;font-size:.72rem;background:none;border:0;color:var(--muted);padding:8px 0 9px;display:flex;flex-direction:column;align-items:center;gap:1px}
+nav button span{font-size:1.15rem;line-height:1.2}
+nav button.on{color:var(--accent);font-weight:800}
+table{border-collapse:collapse;width:100%;font-size:.86rem;margin:6px 0}
+th,td{border:1px solid var(--line);padding:5px 7px;text-align:left;vertical-align:top}
+th{background:var(--soft)}
+td:nth-child(2) b{white-space:nowrap}
+pre{white-space:pre!important;overflow-x:auto;font-size:.76rem!important}
+</style>
+</head>
+<body>
+<header>
+  <h1>Quiz #1 핵심</h1>
+  <p class="sub">프로그래밍1 · Lecture 15·17 · 탭을 눌러 이동</p>
+  <div class="dday">
+    <span class="chip">11/17(화) 수업 중 <b>10분</b></span>
+    <span class="chip"><b>closed book</b></span>
+    <span class="chip"><b>O/X + 코드 빈칸</b></span>
+  </div>
+</header>
+<main>
+
+<section id="s-concept" class="on">
+<h2>복잡도 (Big O)</h2>
+<div class="card">
+  <h3>Big O란</h3>
+  <ul>
+    <li>n이 커질 때 <b>비교 횟수가 늘어나는 모양</b>. 초 단위 시간이 아님</li>
+    <li>만드는 법: 비교 횟수 식에서 <b>계수 버리고, 가장 큰 차수만</b> 남김</li>
+    <li>(n−1)n/2 = n²/2 − n/2 → <b>O(n²)</b></li>
+  </ul>
+</div>
+<div class="card">
+  <h3>복잡도 한 장 정리 ★</h3>
+  <table>
+    <tr><th>알고리즘</th><th>Big O</th><th>이유</th></tr>
+    <tr><td>sequential search</td><td><b>O(n)</b></td><td>최악 n번. 정렬돼도 n</td></tr>
+    <tr><td>binary search</td><td><b>O(log n)</b></td><td>비교마다 범위 절반. <b>정렬 필수</b></td></tr>
+    <tr><td>selection sort</td><td><b>O(n²)</b></td><td>(n−1)n/2번</td></tr>
+    <tr><td>bubble sort</td><td><b>O(n²)</b></td><td>(n−1)n/2번</td></tr>
+    <tr><td>merge sort</td><td><b>O(n log n)</b></td><td>log n 라운드 × n번</td></tr>
+  </table>
+  <p><b>빠른 순서:</b> O(log n) &gt; O(n) &gt; O(n log n) &gt; O(n²)</p>
+  <p class="muted">차수가 낮을수록 빠름. n=1,000이면 log n≈10, n=1,000, n log n≈10,000, n²=1,000,000</p>
+</div>
+
+<h2>정렬</h2>
+<div class="card">
+  <h3>sort() vs sorted()</h3>
+  <table>
+    <tr><th></th><th>L.sort()</th><th>sorted(L)</th></tr>
+    <tr><td>원본</td><td>바뀜</td><td>그대로</td></tr>
+    <tr><td>반환</td><td><b>None</b></td><td>새 <b>list</b></td></tr>
+    <tr><td>대상</td><td>list만</td><td>tuple·dict도 (결과는 list)</td></tr>
+  </table>
+  <p class="muted">dict에 sorted를 쓰면 key만 정렬된 list</p>
+</div>
+<div class="card">
+  <h3>selection sort</h3>
+  <ul>
+    <li>남은 것 중 <b>가장 작은 값을 맨 앞</b>으로. 맨 앞 값과 비교해 작으면 <b>바로 맞바꿈</b></li>
+    <li>[5,9,4,7,3] → 4번 [3,9,5,7,4] → 3번 [3,4,9,7,5] → 2번 [3,4,5,9,7] → 1번 [3,4,5,7,9]</li>
+    <li>5개면 4+3+2+1 = <b>10번</b></li>
+  </ul>
+</div>
+<div class="card">
+  <h3>bubble sort</h3>
+  <ul>
+    <li>세로로 세우고 <b>아래에서부터 이웃끼리</b> 비교. 위가 크면 바꿈 → 작은 값이 위로</li>
+    <li>한 라운드 끝나면 <b>가장 작은 값이 맨 위</b>에 도착</li>
+    <li>비교 합 10번, O(n²). selection과 차이: <b>맨 앞 값과</b> vs <b>이웃끼리</b></li>
+  </ul>
+</div>
+
+<h2>재귀</h2>
+<div class="card">
+  <h3>recursion</h3>
+  <ul>
+    <li>몸통 안에서 <b>자기 자신을 부르는</b> 함수</li>
+    <li><b>base case</b>: 자기를 안 부르고 바로 답. <b>recursive case</b>: 더 작은 문제로 자기를 호출</li>
+    <li>while 반복문 팩토리얼은 <b>재귀 아님</b></li>
+    <li>recursion tree는 <b>왼쪽 가지 먼저</b> 끝까지</li>
+    <li>fib(6) = 8 (1,1,2,3,5,8)</li>
+    <li>회문: 첫 글자 == 끝 글자 and <code>s[1:-1]</code>도 회문. base는 <code>len(s) &lt;= 1</code></li>
+  </ul>
+</div>
+
+<h2>탐색 · merge sort</h2>
+<div class="card">
+  <h3>binary search</h3>
+  <ul>
+    <li><b>정렬된 리스트만.</b> 가운데와 비교해 절반 버림</li>
+    <li><code>mid = (low+high)//2</code></li>
+    <li>더 크면 <code>mid+1, high</code> / 더 작으면 <code>low, mid-1</code> (mid는 이미 봤으니 뺌)</li>
+    <li><code>if low == mid: return False</code> = 왼쪽에 남은 게 없을 때</li>
+    <li>n/2^k = 1 → k = log₂n</li>
+  </ul>
+</div>
+<div class="card">
+  <h3>merge sort</h3>
+  <ul>
+    <li>길이 0·1이면 정렬됨(base) → 아니면 <b>반으로 나눠</b> 각각 merge sort → <b>merge</b></li>
+    <li>merge: 두 리스트 <b>맨 앞끼리 비교</b>, 작은 쪽을 넣음. 한쪽이 바닥나면 <b>남은 쪽을 그대로 붙임</b></li>
+    <li>merge 비교 최대 len(left)+len(right)−1 (4+4면 7번)</li>
+    <li>8개면 log₂8 = <b>3라운드</b> × n번 → O(n log n)</li>
+  </ul>
+</div>
+</section>
+
+<section id="s-code">
+<h2>코드 외우기</h2>
+<p class="muted">빈칸으로 나오기 쉬운 줄은 주석에 ★. 각 카드를 눌러 펼치세요.</p>
+
+<div class="card"><details open><summary>selection sort (L15 p.10)</summary>
+<pre><code>def selection_sort(L):
+    start = 0
+    end = len(L)
+    while start &lt; end - 1:           # ★
+        for i in range(start + 1, end):  # ★
+            if L[i] &lt; L[start]:
+                L[start], L[i] = L[i], L[start]
+        start += 1
+    return L</code></pre></details></div>
+
+<div class="card"><details><summary>bubble sort (L15 p.16)</summary>
+<pre><code>def bubble_sort(L):
+    end = len(L)
+    for start in range(end - 1):      # ★
+        for j in range(end - 1 - start):  # ★
+            i1 = (end - 1) - (j + 1)  # 위
+            i2 = (end - 1) - j        # 아래
+            if L[i1] &gt; L[i2]:
+                L[i1], L[i2] = L[i2], L[i1]
+    return L</code></pre>
+<p class="muted">i2는 아래 끝에서 j만큼 올라간 자리, i1은 그 바로 위</p></details></div>
+
+<div class="card"><details><summary>binary search (L17 p.12)</summary>
+<pre><code>def b_search(L, q, low, high):
+    if low == high:
+        return L[low] == q
+    mid = (low + high) // 2
+    if L[mid] == q:
+        return True
+    elif L[mid] &lt; q:
+        return b_search(L, q, mid + 1, high)
+    else:
+        if low == mid:
+            return False
+        else:
+            return b_search(L, q, low, mid - 1)</code></pre></details></div>
+
+<div class="card"><details><summary>merge sort (L17 p.15·17)</summary>
+<pre><code>def merge_sort(L):
+    if len(L) &lt; 2:
+        return L[:]
+    mid = len(L) // 2
+    left = merge_sort(L[:mid])
+    right = merge_sort(L[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i, j = 0, 0
+    while i &lt; len(left) and j &lt; len(right):
+        if left[i] &lt; right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    while i &lt; len(left):
+        result.append(left[i])
+        i += 1
+    while j &lt; len(right):
+        result.append(right[j])
+        j += 1
+    return result</code></pre></details></div>
+
+<div class="card"><details><summary>재귀: fact · fib · 회문</summary>
+<pre><code>def fact(n):
+    if n == 1:
+        return 1
+    return n * fact(n - 1)
+
+def fib(n):
+    if n == 1 or n == 2:
+        return 1
+    return fib(n - 1) + fib(n - 2)
+
+def is_palin(s):
+    if len(s) &lt;= 1:
+        return True
+    return (s[0] == s[-1]) and is_palin(s[1:-1])</code></pre></details></div>
+</section>
+
+<section id="s-ox">
+<h2>O/X 카드</h2>
+<p class="muted">Claude가 만든 예상 문제입니다. 실제 출제와 다를 수 있어요.</p>
+<div class="qbar"><span id="ox-pos"></span><button onclick="shuffle('ox')">섞기</button></div>
+<div class="card flash"><div class="tag" id="ox-tag"></div><div class="q" id="ox-q"></div>
+  <div class="ans" id="ox-ans"><div class="big" id="ox-a"></div><div id="ox-w"></div></div></div>
+<div class="btns" id="ox-b1"><button class="show" onclick="reveal('ox')">정답 보기</button></div>
+<div class="btns" id="ox-b2" style="display:none"><button class="again" onclick="mark('ox',0)">틀렸어요</button><button class="know" onclick="mark('ox',1)">맞았어요</button></div>
+<div class="score" id="ox-sc"></div>
+</section>
+
+<section id="s-fill">
+<h2>빈칸 연습</h2>
+<p class="muted">종이에 먼저 쓰고 "답 보기"를 누르세요.</p>
+<div id="fill-list"></div>
+</section>
+
+</main>
+
+<nav>
+  <button class="on" data-t="concept"><span>📖</span>개념</button>
+  <button data-t="code"><span>💻</span>코드</button>
+  <button data-t="ox"><span>⭕</span>O/X</button>
+  <button data-t="fill"><span>✍️</span>빈칸</button>
+</nav>
+
+<script>
+var OX=[
+["복잡도","L.sort()는 정렬된 새 리스트를 반환한다.","X","None을 반환하고 원본이 바뀝니다."],
+["복잡도","sorted(L)을 실행해도 원본 L은 바뀌지 않는다.","O",""],
+["복잡도","sorted((3,1,2))의 결과는 tuple (1,2,3)이다.","X","항상 list [1,2,3]."],
+["복잡도","dict에 sorted()를 쓰면 key가 정렬된 list가 나온다.","O",""],
+["복잡도","selection sort로 원소 5개를 정렬하면 비교를 10번 한다.","O","4+3+2+1"],
+["복잡도","selection sort와 bubble sort는 둘 다 O(n²)이다.","O",""],
+["복잡도","bubble sort는 한 라운드가 끝나면 가장 큰 값이 index 0으로 간다.","X","가장 작은 값이 위로 올라갑니다."],
+["복잡도","selection sort의 while 조건은 start < end 이다.","X","start < end - 1"],
+["복잡도","(n−1)n/2를 Big O로 쓰면 O(n²/2)이다.","X","계수를 버려 O(n²)"],
+["복잡도","O(n)은 O(n²)보다 일반적으로 빠르다.","O",""],
+["재귀","base case는 자기 자신을 다시 호출하는 부분이다.","X","그건 recursive case."],
+["재귀","while 반복문으로 계산하는 팩토리얼 함수도 재귀 함수다.","X","몸통에서 자기를 안 부르면 재귀 아님"],
+["재귀","base case가 없으면 재귀 호출이 끝나지 않는다.","O",""],
+["재귀","fib(6)의 값은 8이다.","O","1,1,2,3,5,8"],
+["재귀","recursion tree는 오른쪽 가지를 먼저 처리한다.","X","왼쪽 먼저"],
+["재귀","is_palin(\"doggod\")의 다음 호출 인자는 \"oggo\"이다.","O","s[1:-1]"],
+["탐색","binary search는 정렬되지 않은 리스트에도 쓸 수 있다.","X","정렬 필수"],
+["탐색","정렬된 리스트에서 sequential search는 O(log n)이다.","X","최악은 여전히 n번, O(n)"],
+["탐색","binary search의 복잡도는 O(log n)이다.","O",""],
+["탐색","q가 L[mid]보다 크면 b_search(L, q, low, mid - 1)을 호출한다.","X","오른쪽: mid + 1, high"],
+["탐색","merge sort의 base case는 길이가 0 또는 1일 때다.","O","len(L) < 2"],
+["탐색","merge sort의 복잡도는 O(n²)이다.","X","O(n log n)"],
+["탐색","원소 8개면 merge sort는 3라운드로 나뉜다.","O","log₂8 = 3"],
+["탐색","길이 4인 두 정렬 리스트를 merge하면 비교는 최대 7번이다.","O","4+4−1"],
+["탐색","merge의 첫 while문은 두 리스트 중 하나라도 남아 있으면 계속 돈다.","X","and라서 둘 다 남아 있을 때만"],
+["탐색","O(n log n)은 O(n²)보다 빠르다.","O",""],
+["탐색","binary search와 merge sort는 divide and conquer 방식이다.","O",""]
+];
+var FILL=[
+["selection sort",["while ____(A)____:","for i in ____(B)____:","____(C)____   # 맞바꾸기"],["(A) start < end - 1","(B) range(start + 1, end)","(C) L[start], L[i] = L[i], L[start]"]],
+["bubble sort",["for start in ____(A)____:","for j in ____(B)____:","i1 = ____(C)____","i2 = ____(D)____"],["(A) range(end - 1)","(B) range(end - 1 - start)","(C) (end - 1) - (j + 1)","(D) (end - 1) - j"]],
+["binary search",["if low == high: return ____(A)____","mid = ____(B)____","L[mid] < q 이면 return ____(C)____","else 안: if ____(D)____: return False"],["(A) L[low] == q","(B) (low + high) // 2","(C) b_search(L, q, mid + 1, high)","(D) low == mid"]],
+["merge sort",["if ____(A)____: return L[:]","left = ____(B)____","right = ____(C)____","첫 while ____(D)____:","남은 왼쪽 while ____(E)____:"],["(A) len(L) < 2","(B) merge_sort(L[:mid])","(C) merge_sort(L[mid:])","(D) i < len(left) and j < len(right)","(E) i < len(left)"]],
+["재귀",["fact: if ____(A)____: return 1","return ____(B)____","is_palin: if ____(C)____: return True","return (s[0] == s[-1]) and ____(D)____"],["(A) n == 1","(B) n * fact(n - 1)","(C) len(s) <= 1","(D) is_palin(s[1:-1])"]]
+];
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+var S={list:OX.map(function(_,i){return i}),i:0,know:0,seen:0};
+try{var sv=JSON.parse(localStorage.getItem('p1quiz1')||'null');if(sv&&sv.list&&sv.list.length===OX.length)S=sv}catch(e){}
+function save(){try{localStorage.setItem('p1quiz1',JSON.stringify(S))}catch(e){}}
+function $(id){return document.getElementById(id)}
+function render(){
+ if(S.i>=S.list.length){$('ox-q').textContent='끝! '+S.know+' / '+S.seen+' 맞음. "섞기"로 다시 시작하세요.';$('ox-tag').textContent='';$('ox-pos').textContent='';$('ox-ans').className='ans';$('ox-b1').style.display='none';$('ox-b2').style.display='none';$('ox-sc').textContent='';return}
+ var d=OX[S.list[S.i]];
+ $('ox-pos').textContent=(S.i+1)+' / '+S.list.length;
+ $('ox-tag').textContent=d[0];$('ox-q').textContent=d[1];
+ $('ox-a').textContent='정답: '+d[2];$('ox-w').textContent=d[3];
+ $('ox-ans').className='ans';$('ox-b1').style.display='flex';$('ox-b2').style.display='none';
+ $('ox-sc').textContent='이번 라운드 '+S.know+' / '+S.seen+' 맞음';
+}
+function reveal(){$('ox-ans').className='ans on';$('ox-b1').style.display='none';$('ox-b2').style.display='flex'}
+function mark(_,ok){S.seen++;if(ok)S.know++;S.i++;save();render()}
+function shuffle(){var a=S.list;for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}S.i=0;S.know=0;S.seen=0;save();render()}
+render();
+(function(){var h='';FILL.forEach(function(f,n){
+ h+='<div class="card"><h3>'+esc(f[0])+'</h3><pre><code>'+f[1].map(esc).join('\n')+'</code></pre><details><summary>답 보기</summary><ul>'+f[2].map(function(x){return '<li><code>'+esc(x)+'</code></li>'}).join('')+'</ul></details></div>'});
+ $('fill-list').innerHTML=h})();
+var btns=document.querySelectorAll('nav button');
+btns.forEach(function(b){b.onclick=function(){
+ btns.forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+ document.querySelectorAll('section').forEach(function(s){s.classList.remove('on')});
+ $('s-'+b.dataset.t).classList.add('on');window.scrollTo(0,0);
+ try{location.hash=b.dataset.t}catch(e){}}});
+var h=(location.hash||'').slice(1);if(h){var t=document.querySelector('nav button[data-t="'+h+'"]');if(t)t.click()}
+</script>
+</body>
+</html>
